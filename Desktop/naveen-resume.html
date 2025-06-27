@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naveen K — Senior Mobile Engineer</title>
+
+    <!-- Chosen Palette: Modern Professional (Warm Off-white, Dark Charcoal, Professional Blue, Muted Gray) -->
+    <!-- Application Structure Plan: The SPA is structured into logical, thematic sections navigable via a sticky header, transforming the linear report into an interactive dashboard. The flow is: Hero (immediate impact) -> About/Philosophy (personality) -> Skills (quantified expertise via interactive chart) -> Projects (deep-dive showcase with tabs and visualizations) -> Contact (clear CTA). This non-linear structure allows recruiters to quickly jump to sections of interest, making exploration more efficient and engaging than reading a static document. The tabbed interface for projects prevents an overwhelmingly long page and focuses user attention on one case study at a time. -->
+    <!-- Visualization & Content Choices: 
+        - Philosophy Section: Report Info -> Core Principles -> Goal: Organize -> Presentation: 3-column card layout -> Interaction: None, focus on scannability -> Justification: Breaks down dense text into digestible, parallel concepts. Method: HTML/Tailwind.
+        - Technical Proficiencies: Report Info -> Skills Table -> Goal: Inform/Compare -> Viz: Radar Chart -> Interaction: Hover to see proficiency scores -> Justification: A radar chart provides a more immediate, holistic view of skill balance than a text table. Library: Chart.js/Canvas.
+        - DailyBloom Project: Report Info -> Analytics feature impact -> Goal: Change -> Viz: Line Chart ("User Engagement Over Time") -> Interaction: Hover for data points -> Justification: Visually represents the described positive trend in user engagement, showing impact rather than just telling. Library: Chart.js/Canvas.
+        - Lissun Project: Report Info -> Feature scaling -> Goal: Compare -> Viz: Bar Chart ("Feature Growth: Before & After") -> Interaction: Hover for details -> Justification: Clearly quantifies the impact of the developer's contributions on platform growth. Library: Chart.js/Canvas.
+        - MonkeyBox Project: Report Info -> MVP development timeline -> Goal: Organize/Show Change -> Viz: HTML/CSS Timeline -> Interaction: None, visual flow -> Justification: A visual timeline is more effective for showing a process over time than a list of contributions. Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .project-chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px;
+            max-height: 300px;
+        }
+
+        .text-primary {
+            color: #0056b3;
+        }
+
+        .bg-primary {
+            background-color: #0056b3;
+        }
+
+        .border-primary {
+            border-color: #0056b3;
+        }
+
+        .outline-primary {
+            outline-color: #0056b3;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #343A40;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+
+        .tab-active {
+            border-color: #0056b3;
+            color: #0056b3;
+            background-color: #E7F1FF;
+        }
+
+        .tab-inactive {
+            border-color: transparent;
+            color: #6C757D;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#hero" class="text-xl font-bold text-primary">Naveen K</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                <a href="#skills" class="text-gray-600 hover:text-primary transition-colors">Skills</a>
+                <a href="#projects" class="text-gray-600 hover:text-primary transition-colors">Projects</a>
+                <a href="#contact" class="btn-primary font-medium py-2 px-4 rounded-lg text-sm">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 text-gray-600 hover:text-primary">About</a>
+            <a href="#skills" class="block py-2 text-gray-600 hover:text-primary">Skills</a>
+            <a href="#projects" class="block py-2 text-gray-600 hover:text-primary">Projects</a>
+            <a href="#contact" class="block mt-2 btn-primary font-medium py-2 px-4 rounded-lg text-center">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight">Senior Mobile Engineer</h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Crafting smooth, scalable, and
+                    user-centric cross-platform mobile applications (Android & iOS) from concept to launch.</p>
+                <div class="mt-10 flex justify-center items-center gap-4 text-left">
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><span class="text-primary text-xl mr-2">✓</span> Cross-Platform
+                            App Development</li>
+                        <li class="flex items-center"><span class="text-primary text-xl mr-2">✓</span> Product Revamps &
+                            Performance Optimization</li>
+                        <li class="flex items-center"><span class="text-primary text-xl mr-2">✓</span> Interactive Data
+                            Visualization & UI/UX Builds</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="bg-white py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800">The Developer Behind the Code</h2>
+                    <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">My approach blends technical precision with
+                        a deep understanding of user needs to build products with impact.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-primary mb-2">A Product-First Approach</h3>
+                        <p class="text-gray-700">The best code serves a clear product vision. I partner with teams to
+                            contribute to the 'why' behind features, ensuring technical decisions align with user needs
+                            and business goals.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-primary mb-2">Clean UI, Efficient Backend</h3>
+                        <p class="text-gray-700">A seamless user experience results from a well-engineered foundation. I
+                            focus on clean code, efficient state management, and optimized data flow for apps that are
+                            smooth inside and out.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-primary mb-2">Scalable & Sustainable</h3>
+                        <p class="text-gray-700">I build for the future. By writing modular, testable, and scalable
+                            code, I ensure faster feature development, fewer bugs, and a lower total cost of ownership
+                            for the product over its lifecycle.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800">Technical Proficiencies</h2>
+                    <p class="mt-2 text-lg text-gray-600 max-w-2xl mx-auto">Expertise in cross-platform technologies
+                        like Flutter and React Native for efficient, full-stack mobile development.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="chart-container">
+                        <canvas id="skillsRadarChart"></canvas>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Core Competencies</h3>
+                        <ul class="space-y-4">
+                            <li class="flex">
+                                <span class="text-primary font-bold text-xl mr-3">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Architecting for Scale</h4>
+                                    <p class="text-gray-600 text-sm">Designing scalable mobile architectures (MVVM,
+                                        SOLID) to support complex features and large user bases.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="text-primary font-bold text-xl mr-3">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Firebase Ecosystem Mastery</h4>
+                                    <p class="text-gray-600 text-sm">Deep, hands-on experience across the entire
+                                        Firebase suite to build full-featured, serverless applications rapidly.</p>
+                                </div>
+                            </li>
+                            <li class="flex">
+                                <span class="text-primary font-bold text-xl mr-3">✓</span>
+                                <div>
+                                    <h4 class="font-semibold">Cross-Functional Collaboration</h4>
+                                    <p class="text-gray-600 text-sm">Translating Figma/XD designs into pixel-perfect UIs
+                                        and collaborating with backend teams on API design.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="bg-white py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800">Project Showcase</h2>
+                    <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">In-depth case studies of problems solved,
+                        challenges overcome, and impact delivered. Click a project to see the details.</p>
+                </div>
+
+                <!-- Project Tabs -->
+                <div id="project-tabs" class="flex justify-center border-b border-gray-200 mb-8 flex-wrap">
+                    <button data-project="dailybloom"
+                        class="project-tab py-3 px-6 font-semibold border-b-2 transition-all tab-active">DailyBloom</button>
+                    <button data-project="lissun"
+                        class="project-tab py-3 px-6 font-semibold border-b-2 transition-all tab-inactive">Lissun</button>
+                    <button data-project="monkeybox"
+                        class="project-tab py-3 px-6 font-semibold border-b-2 transition-all tab-inactive">MonkeyBox</button>
+                </div>
+
+                <!-- Project Content -->
+                <div id="project-content-area">
+                    <!-- DailyBloom Content -->
+                    <div id="project-dailybloom" class="project-content">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="order-2 lg:order-1">
+                                <h3 class="text-2xl font-bold text-gray-800">DailyBloom: Wellness Through Data
+                                    Visualization</h3>
+                                <p class="text-gray-500 mt-1 mb-2">Role: Lead Flutter Developer (Analytics Module)</p>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <a href="https://apps.apple.com/in/app/dailybloom/id6477444874" target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-xs font-semibold py-1 px-3 rounded-full bg-gray-800 text-white hover:bg-gray-600 transition-colors">App
+                                        Store</a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.drreddys.dailybloom"
+                                        target="_blank" rel="noopener noreferrer"
+                                        class="text-xs font-semibold py-1 px-3 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors">Google
+                                        Play</a>
+                                </div>
+                                <p class="text-gray-700 mb-4">For this digital therapeutic platform, I was tasked with
+                                    empowering users by making their complex wellness data understandable. The challenge
+                                    was translating raw backend data into dynamic, intuitive charts that would motivate
+                                    users on their 14-week health journey.</p>
+                                <h4 class="font-semibold mb-2">Impact: Shaped a Core User Experience</h4>
+                                <p class="text-gray-700">The interactive analytics feature I built became pivotal to the
+                                    app's <strong>4.7-star rating</strong>. By visualizing progress, we drove user
+                                    engagement and retention, helping users see the tangible results of their efforts.
+                                </p>
+                            </div>
+                            <div class="order-1 lg:order-2">
+                                <p class="text-center font-semibold text-gray-600 mb-2">Visualization: User Engagement
+                                    Over 14 Weeks</p>
+                                <div class="project-chart-container">
+                                    <canvas id="dailyBloomChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lissun Content -->
+                    <div id="project-lissun" class="project-content hidden">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800">Lissun: Scaling a Mental Health Platform
+                                </h3>
+                                <p class="text-gray-500 mt-1 mb-2">Role: Flutter Developer (Product Team)</p>
+                                <div class="flex items-center gap-2 mb-4">
+                                    <a href="https://apps.apple.com/in/app/lissun/id1620115148" target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-xs font-semibold py-1 px-3 rounded-full bg-gray-800 text-white hover:bg-gray-600 transition-colors">App
+                                        Store</a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.lissun.app"
+                                        target="_blank" rel="noopener noreferrer"
+                                        class="text-xs font-semibold py-1 px-3 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors">Google
+                                        Play</a>
+                                </div>
+                                <p class="text-gray-700 mb-4">I joined a high-performing team to scale this mental
+                                    health app. My mission was to integrate critical new features like real-time chat
+                                    and session booking into the live product without introducing instability, while
+                                    also optimizing performance for a growing user base.</p>
+                                <h4 class="font-semibold mb-2">Impact: Enabled Core Business Growth</h4>
+                                <p class="text-gray-700">The features I built were fundamental to expanding Lissun's
+                                    service offerings from self-help to professional therapy, a key driver of user
+                                    acquisition and revenue. This work was instrumental during a key growth phase.</p>
+                            </div>
+                            <div>
+                                <p class="text-center font-semibold text-gray-600 mb-2">Visualization: Platform Feature
+                                    Growth</p>
+                                <div class="project-chart-container">
+                                    <canvas id="lissunChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- MonkeyBox Content -->
+                    <div id="project-monkeybox" class="project-content hidden">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="order-2 lg:order-1">
+                                <h3 class="text-2xl font-bold text-gray-800">MonkeyBox: Architecting a Mission-Driven
+                                    MVP</h3>
+                                <p class="text-gray-500 mt-1 mb-2">Role: Core Flutter Developer (MVP Team)</p>
+                                <div class="mb-4">
+                                    <p class="text-sm italic text-gray-500">Note: This app is
+                                        no longer live on the app stores.</p>
+                                </div>
+                                <p class="text-gray-700 mb-4">As a core developer for this food-tech startup, my goal
+                                    was to rapidly build the parent-facing MVP. The challenge was creating a complex app
+                                    with calendar-based ordering, payments, and delivery tracking in a fast-paced
+                                    environment to launch quickly.</p>
+                                <h4 class="font-semibold mb-2">Impact: Successful MVP Launch & Real-World Value</h4>
+                                <p class="text-gray-700">I developed and helped launch the core mobile app, enabling
+                                    MonkeyBox to begin operations and start generating revenue. The product solved a
+                                    genuine problem for parents and contributed to healthier eating for children.</p>
+                            </div>
+                            <div class="order-1 lg:order-2">
+                                <p class="text-center font-semibold text-gray-600 mb-2">Process: Rapid MVP Delivery
+                                    Timeline</p>
+                                <div class="p-4 rounded-lg bg-gray-50/50">
+                                    <div class="relative pl-4">
+                                        <!-- Timeline track -->
+                                        <div class="absolute left-[1.12rem] top-2 bottom-2 w-0.5 bg-blue-200"></div>
+                                        <!-- Timeline items -->
+                                        <div class="relative mb-6">
+                                            <div
+                                                class="absolute -left-1.5 top-0.5 w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                                                1</div>
+                                            <p class="ml-10 font-semibold text-gray-700">Weeks 1-2: Core Architecture &
+                                                UI Shell</p>
+                                        </div>
+                                        <div class="relative mb-6">
+                                            <div
+                                                class="absolute -left-1.5 top-0.5 w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                                                2</div>
+                                            <p class="ml-10 font-semibold text-gray-700">Weeks 3-5: Calendar Ordering &
+                                                Payments</p>
+                                        </div>
+                                        <div class="relative mb-6">
+                                            <div
+                                                class="absolute -left-1.5 top-0.5 w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                                                3</div>
+                                            <p class="ml-10 font-semibold text-gray-700">Weeks 6-7: Backend Integration
+                                                & Tracking</p>
+                                        </div>
+                                        <div class="relative">
+                                            <div
+                                                class="absolute -left-1.5 top-0.5 w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center font-bold text-sm">
+                                                4</div>
+                                            <p class="ml-10 font-semibold text-gray-700">Week 8: Testing, Polish &
+                                                Launch</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-gray-800">Let's Build Together</h2>
+                <p class="mt-2 text-lg text-gray-600 max-w-xl mx-auto">I'm passionate about partnering with innovative
+                    teams to build exceptional mobile applications. If you have an idea to bring to life, I'd love to
+                    hear from you.</p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="https://calendly.com/naveen-nk-nav/30min" target="_blank" rel="noopener noreferrer"
+                        class="btn-primary font-bold py-3 px-8 rounded-lg shadow-lg inline-block w-full sm:w-auto">
+                        Schedule a Call
+                    </a>
+                    <a href="https://www.linkedin.com/in/naveen-k-3188ab129/" target="_blank" rel="noopener noreferrer"
+                        class="btn-secondary font-bold py-3 px-8 rounded-lg shadow-lg inline-block w-full sm:w-auto">
+                        View LinkedIn
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6 text-center text-sm text-gray-400">
+            <p>&copy; 2025 Naveen K. | Interactive Portfolio</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Project Tabs
+            const tabs = document.querySelectorAll('.project-tab');
+            const projectContents = document.querySelectorAll('.project-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const project = tab.dataset.project;
+
+                    tabs.forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('tab-inactive');
+
+                    projectContents.forEach(content => {
+                        if (content.id === `project-${project}`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Chart.js Configuration
+            const chartJsTooltipConfig = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function (tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            };
+
+            const primaryColor = '#0056b3';
+            const primaryColorTransparent = 'rgba(0, 86, 179, 0.2)';
+
+            // Skills Radar Chart
+            new Chart(document.getElementById('skillsRadarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Dart & Flutter', 'React Native', 'Firebase Suite', 'State Mgmt', 'Architecture', ['API &', 'Databases'], 'Testing & CI/CD'],
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: [9.5, 8, 9, 8.5, 8.5, 8.5, 8],
+                        backgroundColor: primaryColorTransparent,
+                        borderColor: primaryColor,
+                        pointBackgroundColor: primaryColor,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: primaryColor
+                    }]
+                },
+                options: {
+                    ...chartJsTooltipConfig,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 12 } },
+                            ticks: { display: false, stepSize: 2 },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        ...chartJsTooltipConfig.plugins,
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // DailyBloom Line Chart
+            new Chart(document.getElementById('dailyBloomChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Start', 'Week 4', 'Week 8', 'Week 12', 'End'],
+                    datasets: [{
+                        label: 'User Engagement',
+                        data: [35, 45, 65, 80, 95],
+                        fill: true,
+                        backgroundColor: primaryColorTransparent,
+                        borderColor: primaryColor,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    ...chartJsTooltipConfig,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, suggestedMax: 100 } },
+                    plugins: { ...chartJsTooltipConfig.plugins, legend: { display: false } }
+                }
+            });
+
+            // Lissun Bar Chart
+            new Chart(document.getElementById('lissunChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Core Features', 'Therapeutic Services', 'Notifications'],
+                    datasets: [{
+                        label: 'Before My Work',
+                        data: [5, 2, 0],
+                        backgroundColor: '#C9D6E2',
+                    }, {
+                        label: 'After My Work',
+                        data: [8, 5, 1],
+                        backgroundColor: primaryColor,
+                    }]
+                },
+                options: {
+                    ...chartJsTooltipConfig,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { ...chartJsTooltipConfig.plugins, legend: { position: 'bottom' } }
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
